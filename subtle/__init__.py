@@ -36,12 +36,20 @@ def start():
 	pass
 
 @start.command()
-@click.argument('title')
-def open(title):
-	print("Getting the files")
-	point = Point.get(Point.title == title)
-	os.system('subl %s'%point.dir)
-	print("Opening the folder ...")
+@click.argument('title', nargs=-1)
+@click.option('--file', default=None)
+def open(title, file):
+	print("Getting the files...")
+	for t in title:
+		try:
+			point = Point.get(Point.title == t)
+			os.system('subl %s'%point.dir)	
+		except Exception:
+			print(Fore.RED+"Checkpoint %s doesn't exists"%t)
+	if os.path.isfile(file):
+		os.system('subl %s'%file)
+	else:
+		print(Fore.RED+"File doesn't exist")
 
 @click.group()
 def delete():
