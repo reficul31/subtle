@@ -56,13 +56,16 @@ def delete():
 	pass
 
 @delete.command()
-@click.argument('title')
+@click.argument('title', nargs=-1)
 def destroy(title):
-	print("Destroying the checkpoint %s"%title)
-	point = Point.get(Point.title == title)
-	point.delete_instance()
-	print(Fore.GREEN+"Checkpoint destroyed successfully")
-	print(Fore.WHITE)
+	print("Getting the checkpoints...")
+	for t in title:
+		try:
+			point = Point.get(Point.title == t)
+			point.delete_instance()
+			print(Fore.GREEN+"Checkpoint %s destroyed successfully"%t+Fore.WHITE)
+		except Exception:
+			print(Fore.RED+"Checkpoint %s doesn't exist"%t+Fore.WHITE)
 
 main = click.CommandCollection(sources=[create,start, delete])
 
