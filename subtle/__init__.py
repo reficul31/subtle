@@ -8,8 +8,9 @@ def create():
 
 @create.command()
 @click.argument('title')
-@click.option('--dirname', default=os.getcwd())
+@click.option('--dirname', default=os.getcwd(), help='Give a directory name with the tag')
 def checkpoint(title, dirname):
+	""" Used for saving the checkpoints in the file directory system """
 	if os.path.isdir(dirname):
 		print("Making a new checkpoint....")
 		if Point.select().where(Point.title == title).exists() or Point.select().where(Point.dir == dirname).exists():
@@ -22,6 +23,7 @@ def checkpoint(title, dirname):
 
 @create.command()
 def list():
+	""" Used for listing all the saved checkpoints """
 	points = Point.select()
 	print(Fore.GREEN+"Checkpoints Found:%s"%Point.select().count())
 	for point in points:
@@ -29,6 +31,7 @@ def list():
 
 @create.command()
 def dbinit():
+	""" Used for intializing the database or dropping the current database and making a new one """
 	initdb()
 
 @click.group()
@@ -37,9 +40,10 @@ def start():
 
 @start.command()
 @click.argument('title', nargs=-1)
-@click.option('--file', default=None)
-@click.option('--folder', default=None)
+@click.option('--file', default=None, help='Give a file path')
+@click.option('--folder', default=None, help='Give a folder path')
 def open(title, file, folder):
+	""" Used to open the files in checkpoints, in directory or even files """
 	print("Getting the files...")
 	for t in title:
 		try:
@@ -65,6 +69,7 @@ def delete():
 @delete.command()
 @click.argument('title', nargs=-1)
 def destroy(title):
+	""" Used to destroy the already made checkpoints """
 	print("Getting the checkpoints...")
 	for t in title:
 		try:
