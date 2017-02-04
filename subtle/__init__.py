@@ -13,11 +13,11 @@ def checkpoint(title, dirname):
 	""" Used for saving the checkpoints in the file directory system """
 	if os.path.isdir(dirname):
 		print("Making a new checkpoint....")
-		if Point.select().where(Point.title == title).exists() or Point.select().where(Point.dir == dirname).exists():
-			print(Fore.RED+"Checkpoint already exists")
-		else:
-			point = Point.create(title = title, dir=dirname)
+		try:
+			point = Point.create(title=title,dir=dirname)
 			print(Fore.GREEN+"Checkpoint made successully")
+		except Exception:
+			print(Fore.RED+"Checkpoint already exists")
 	else:
 		print(Fore.RED+"Directory doesn't exist"+Fore.WHITE)
 
